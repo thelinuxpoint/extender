@@ -1,0 +1,214 @@
+#!/bin/bash
+if [[ `id -u` -ne 0 ]]; then
+	echo "Run as Root ... ";
+	exit 1
+fi
+
+printf "############### \x1b[33mExtender v(0.1.0)\x1b[0m ############### \n"
+
+# check for hostapd
+printf "~> checking for hostapd ... ";
+if [[ -e /usr/sbin/hostapd ]]; then
+	printf "ok\n"
+	sleep 0.5
+	printf "\033[A\33[2K\r"
+else
+	echo "not found";
+	printf "Installing ... hostapd \n"
+	sudo apt-get install hostapd;
+	if [[ $? -ne 0 ]]; then
+		echo "Failed"
+		exit 1
+	fi
+fi
+# Check for dnsmasq
+printf "~> checking for dnsmasq ... ";
+if [[ -e /usr/sbin/dnsmasq ]]; then
+	printf "ok\n"
+	sleep 0.5
+	printf "\033[A\33[2K\r"
+	
+else
+	echo "not found"
+	printf "Installing ... dnsmasq \n"
+	sudo apt-get install dnsmasq;
+	if [[ $? -ne 0 ]]; then
+		echo "Failed"
+		exit 1
+	fi
+fi
+# check for xterm
+printf "~> checking for xterm ... ";
+if [[ -e /usr/bin/xterm ]]; then
+	printf "ok\n"
+	sleep 0.5
+	printf "\033[A\33[2K\r"
+else
+	echo "not found"
+	printf "Installing ... xterm \n"
+	sudo apt-get install xterm;
+	if [[ $? -ne 0 ]]; then
+		echo "Failed"
+		exit 1
+	fi
+fi
+
+echo "~> Select Emitter Interface (1,2,...)"
+
+
+interface=$(sudo airmon-ng | cut -f 2 | grep wlan)
+
+
+select c in $interface;
+do
+	break;
+done
+
+if [[ -z $c ]]; then
+	exit 1
+fi
+
+interface=( ${interface[@]/$c} )
+
+# Network interface means the network that is having internet access
+
+# Emitter interface means our actual hotspot
+
+echo "~> Select Network Interface (1,2,...)" ;
+select i in $interface;
+do
+	echo "~> Your Emitter Interface : $c";
+	echo "~> Your Network Interface : $i";
+	break;
+done
+
+in=$i
+
+if [[ -z $in ]]; then
+	exit 1
+fi
+
+
+# this is the default ip assigned to interface 
+
+# you can change it but you also need to update dnsmasq.conf file so i
+# recommend not to change it
+sudo ifconfig $c down
+sudo ifconfig $c 192.168.28.1 up
+
+echo "~> IP address for $c Interface is 192.168.28.1"
+
+read -p "~> Name Your network (default: Extender) : " ntname ;
+if [[ -z $ntname ]]; then
+	ntname="Extender"
+fi
+read -s -p "~> Select a Password (default: 12341234) : " ntpass ;
+if [[ -z $ntpass ]]; then
+	ntpass="12341234" # i know it is a stupid password 
+fi
+echo 
+
+##############################################
+if [[ -e dnsmasq.conf ]]; then
+	echo "~> dnsmasq.conf exists ... "
+	sleep 0.1
+	printf "\033[A\33[2K\r~> updating dnsmasq.conf file ... ";
+	#######################################################
+	echo "interface=$c" > dnsmasq.conf
+	echo "no-resolv" >> dnsmasq.conf
+	echo "expand-hosts" >> dnsmasq.conf
+    echo "dhcp-authoritative" >> dnsmasq.conf
+	echo "dhcp-range=192.168.28.2,192.168.28.254,255.255.255.0,24h" >> dnsmasq.conf
+	echo "dhcp-range=127.0.0.2,127.0.0.25,24h" >> dnsmasq.conf
+	echo "dhcp-option=3,192.168.28.1" >> dnsmasq.conf
+	echo "dhcp-option=6,192.168.28.1" >> dnsmasq.conf
+	echo "dhcp-option=1,255.255.255.0" >> dnsmasq.conf
+	echo "server=8.8.8.8" >> dnsmasq.conf
+	echo "server=8.8.4.4" >> dnsmasq.conf
+	echo "log-queries" >> dnsmasq.conf
+	echo "log-dhcp" >> dnsmasq.conf
+	echo "listen-address=192.168.28.1,127.0.0.1,::" >> dnsmasq.conf
+	echo "ok"
+	##########################################################
+else
+	printf "~> creating dnsmasq.conf file ... "
+	touch dnsmasq.conf
+	echo "ok"
+	sleep 0.1
+	printf "\033[A\33[2K\r~> updating dnsmasq.conf file ... ";
+	#########################################################
+	echo "interface=$c" > dnsmasq.conf
+	echo "no-resolv" >> dnsmasq.conf
+	echo "expand-hosts" >> dnsmasq.conf
+	echo "dhcp-authoritative" >> dnsmasq.conf
+	echo "dhcp-range=192.168.28.2,192.168.28.254,255.255.255.0,24h" >> dnsmasq.conf
+	echo "dhcp-range=127.0.0.2,127.0.0.25,24h" >> dnsmasq.conf
+	echo "dhcp-option=3,192.168.28.1" >> dnsmasq.conf
+	echo "dhcp-option=6,192.168.28.1" >> dnsmasq.conf
+	echo "dhcp-option=1,255.255.255.0" >> dnsmasq.conf
+	echo "server=8.8.8.8" >> dnsmasq.conf
+	echo "server=8.8.4.4" >> dnsmasq.conf
+	echo "log-queries" >> dnsmasq.conf
+	echo "log-dhcp" >> dnsmasq.conf
+	echo "listen-address=192.168.28.1,127.0.0.1,::" >> dnsmasq.conf
+	##########################################################
+	echo "ok"
+fi
+
+####################################################
+if [[ -e hostapd.conf ]]; then
+	echo "~> hostapd.conf exists ... "
+	sleep 0.1
+	printf "\033[A\33[2K\r~> updating hostapd.conf file ... "
+	############################################
+	echo "interface=$c" > hostapd.conf
+	echo "driver=nl80211" >> hostapd.conf 
+	echo "ssid=$ntname" >> hostapd.conf 
+	echo "channel=$((RANDOM%11 + 1))" >> hostapd.conf 
+	echo "hw_mode=g" >> hostapd.conf 
+	echo "wme_enabled=1" >> hostapd.conf 
+	echo "macaddr_acl=0" >> hostapd.conf 
+	echo "auth_algs=1" >> hostapd.conf 
+	echo "ignore_broadcast_ssid=0" >> hostapd.conf 
+	echo "wpa=2" >> hostapd.conf 
+	echo "wpa_passphrase=$ntpass" >> hostapd.conf 
+	echo "wpa_key_mgmt=WPA-PSK" >> hostapd.conf 
+	echo "wpa_pairwise=TKIP" >> hostapd.conf 
+	echo "rsn_pairwise=CCMP" >> hostapd.conf 
+	echo "ok"
+	##############################################
+else
+	printf "~> creating hostapd.conf file ... "
+	touch hostapd.conf
+	echo "ok"
+	sleep 0.1
+	#############################################
+	printf "\033[A\33[2K\r~> updating hostapd.conf file ... "
+	echo "interface=$c" > hostapd.conf
+	echo "driver=nl80211" >> hostapd.conf 
+	echo "ssid=$ntname" >> hostapd.conf 
+	echo "channel=$((RANDOM%11 + 1))" >> hostapd.conf 
+	echo "hw_mode=g" >> hostapd.conf 
+	echo "wme_enabled=1" >> hostapd.conf 
+	echo "macaddr_acl=0" >> hostapd.conf 
+	echo "auth_algs=1" >> hostapd.conf 
+	echo "ignore_broadcast_ssid=0" >> hostapd.conf 
+	echo "wpa=2" >> hostapd.conf 
+	echo "wpa_passphrase=$ntpass" >> hostapd.conf 
+	echo "wpa_key_mgmt=WPA-PSK" >> hostapd.conf 
+	echo "wpa_pairwise=TKIP" >> hostapd.conf 
+	echo "rsn_pairwise=CCMP" >> hostapd.conf 
+	##############################################
+	echo "ok"
+fi
+
+echo "Extender Service Started ... "
+
+sudo echo 1 > /proc/sys/net/ipv4/ip_forward
+sudo iptables -A FORWARD -i $c -o $in -j ACCEPT
+sudo iptables -A FORWARD -i $in -o $c -m state --state ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -t nat -A POSTROUTING -o $in -j MASQUERADE
+xterm -e bash -c 'sudo dnsmasq -d -C dnsmasq.conf; exec bash' & xterm -e bash -c 'sudo hostapd hostapd.conf; exec bash';
+
+echo "###############    Bye    ###############";
+exit 0
