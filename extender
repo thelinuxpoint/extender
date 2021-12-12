@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if [[ `id -u` -ne 0 ]]; then
 	echo "Run as Root ... ";
 	exit 1
@@ -109,7 +110,7 @@ fi
 echo 
 
 ##############################################
-if [[ -e dnsmasq.conf ]]; then
+if [[ -e /etc/dnsmasq.conf ]]; then
 	echo "~> dnsmasq.conf exists ... "
 	sleep 0.1
 	printf "\033[A\33[2K\r~> updating dnsmasq.conf file ... ";
@@ -132,7 +133,7 @@ if [[ -e dnsmasq.conf ]]; then
 	##########################################################
 else
 	printf "~> creating dnsmasq.conf file ... "
-	touch dnsmasq.conf
+	sudo touch /etc/dnsmasq.conf
 	echo "ok"
 	sleep 0.1
 	printf "\033[A\33[2K\r~> updating dnsmasq.conf file ... ";
@@ -156,7 +157,7 @@ else
 fi
 
 ####################################################
-if [[ -e hostapd.conf ]]; then
+if [[ -e /etc/hostapd.conf ]]; then
 	echo "~> hostapd.conf exists ... "
 	sleep 0.1
 	printf "\033[A\33[2K\r~> updating hostapd.conf file ... "
@@ -179,7 +180,7 @@ if [[ -e hostapd.conf ]]; then
 	##############################################
 else
 	printf "~> creating hostapd.conf file ... "
-	touch hostapd.conf
+	sudo touch /etc/hostapd.conf
 	echo "ok"
 	sleep 0.1
 	#############################################

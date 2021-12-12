@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=extender
+Comment=Multipurpose Network 
+Exec=sudo extender
+Icon=/usr/share/icons/hicolor/128x128/apps/extender.png
+Terminal=true
+Type=Application
+Categories=Network;
+Keywords=extender
