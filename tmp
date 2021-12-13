@@ -1,0 +1,14 @@
+#!/bin/bash
+
+array_test=""
+for iface in $(ifconfig | cut -d ' ' -f1| tr ':' '\n' | awk NF)
+do
+        array_test+="$iface"
+        array_test+=" "
+done
+echo $array_test
+
+select c in $array_test;
+do
+	break;
+done

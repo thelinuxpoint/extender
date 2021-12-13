@@ -57,8 +57,13 @@ fi
 echo "~> Select Emitter Interface (1,2,...)"
 
 
-interface=$(sudo airmon-ng | cut -f 2 | grep wlan)
+interface=""
 
+for iface in $(ifconfig | cut -d ' ' -f1| tr ':' '\n' | awk NF)
+do
+        interface+="$iface"
+        interface+=" "
+done
 
 select c in $interface;
 do
@@ -69,7 +74,7 @@ if [[ -z $c ]]; then
 	exit 1
 fi
 
-interface=( ${interface[@]/$c} )
+interface=${interface[@]/$c}
 
 # Network interface means the network that is having internet access
 
