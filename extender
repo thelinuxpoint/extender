@@ -120,20 +120,20 @@ if [[ -e /etc/dnsmasq.conf ]]; then
 	sleep 0.1
 	printf "\033[A\33[2K\r~> updating dnsmasq.conf file ... ";
 	#######################################################
-	echo "interface=$c" > dnsmasq.conf
-	echo "no-resolv" >> dnsmasq.conf
-	echo "expand-hosts" >> dnsmasq.conf
-    echo "dhcp-authoritative" >> dnsmasq.conf
-	echo "dhcp-range=192.168.28.2,192.168.28.254,255.255.255.0,24h" >> dnsmasq.conf
-	echo "dhcp-range=127.0.0.2,127.0.0.25,24h" >> dnsmasq.conf
-	echo "dhcp-option=3,192.168.28.1" >> dnsmasq.conf
-	echo "dhcp-option=6,192.168.28.1" >> dnsmasq.conf
-	echo "dhcp-option=1,255.255.255.0" >> dnsmasq.conf
-	echo "server=8.8.8.8" >> dnsmasq.conf
-	echo "server=8.8.4.4" >> dnsmasq.conf
-	echo "log-queries" >> dnsmasq.conf
-	echo "log-dhcp" >> dnsmasq.conf
-	echo "listen-address=192.168.28.1,127.0.0.1,::" >> dnsmasq.conf
+	echo "interface=$c" > /etc/dnsmasq.conf
+	echo "no-resolv" >> /etc/dnsmasq.conf
+	echo "expand-hosts" >> /etc/dnsmasq.conf
+    echo "dhcp-authoritative" >> /etc/dnsmasq.conf
+	echo "dhcp-range=192.168.28.2,192.168.28.254,255.255.255.0,24h" >> /etc/dnsmasq.conf
+	echo "dhcp-range=127.0.0.2,127.0.0.25,24h" >> /etc/dnsmasq.conf
+	echo "dhcp-option=3,192.168.28.1" >> /etc/dnsmasq.conf
+	echo "dhcp-option=6,192.168.28.1" >> /etc/dnsmasq.conf
+	echo "dhcp-option=1,255.255.255.0" >> /etc/dnsmasq.conf
+	echo "server=8.8.8.8" >> /etc/dnsmasq.conf
+	echo "server=8.8.4.4" >> /etc/dnsmasq.conf
+	echo "log-queries" >> /etc/dnsmasq.conf
+	echo "log-dhcp" >> /etc/dnsmasq.conf
+	echo "listen-address=192.168.28.1,127.0.0.1,::" >> /etc/dnsmasq.conf
 	echo "ok"
 	##########################################################
 else
@@ -143,20 +143,20 @@ else
 	sleep 0.1
 	printf "\033[A\33[2K\r~> updating dnsmasq.conf file ... ";
 	#########################################################
-	echo "interface=$c" > dnsmasq.conf
-	echo "no-resolv" >> dnsmasq.conf
-	echo "expand-hosts" >> dnsmasq.conf
-	echo "dhcp-authoritative" >> dnsmasq.conf
+	echo "interface=$c" > /etc/dnsmasq.conf
+	echo "no-resolv" >> /etc/dnsmasq.conf
+	echo "expand-hosts" >> /etc/dnsmasq.conf
+	echo "dhcp-authoritative" >> /etc/dnsmasq.conf
 	echo "dhcp-range=192.168.28.2,192.168.28.254,255.255.255.0,24h" >> dnsmasq.conf
-	echo "dhcp-range=127.0.0.2,127.0.0.25,24h" >> dnsmasq.conf
-	echo "dhcp-option=3,192.168.28.1" >> dnsmasq.conf
-	echo "dhcp-option=6,192.168.28.1" >> dnsmasq.conf
-	echo "dhcp-option=1,255.255.255.0" >> dnsmasq.conf
-	echo "server=8.8.8.8" >> dnsmasq.conf
-	echo "server=8.8.4.4" >> dnsmasq.conf
-	echo "log-queries" >> dnsmasq.conf
-	echo "log-dhcp" >> dnsmasq.conf
-	echo "listen-address=192.168.28.1,127.0.0.1,::" >> dnsmasq.conf
+	echo "dhcp-range=127.0.0.2,127.0.0.25,24h" >> /etc/dnsmasq.conf
+	echo "dhcp-option=3,192.168.28.1" >> /etc/dnsmasq.conf
+	echo "dhcp-option=6,192.168.28.1" >> /etc/dnsmasq.conf
+	echo "dhcp-option=1,255.255.255.0" >> /etc/dnsmasq.conf
+	echo "server=8.8.8.8" >> /etc/dnsmasq.conf
+	echo "server=8.8.4.4" >> /etc/dnsmasq.conf
+	echo "log-queries" >> /etc/dnsmasq.conf
+	echo "log-dhcp" >> /etc/dnsmasq.conf
+	echo "listen-address=192.168.28.1,127.0.0.1,::" >> /etc/dnsmasq.conf
 	##########################################################
 	echo "ok"
 fi
@@ -167,20 +167,20 @@ if [[ -e /etc/hostapd.conf ]]; then
 	sleep 0.1
 	printf "\033[A\33[2K\r~> updating hostapd.conf file ... "
 	############################################
-	echo "interface=$c" > hostapd.conf
-	echo "driver=nl80211" >> hostapd.conf 
-	echo "ssid=$ntname" >> hostapd.conf 
-	echo "channel=$((RANDOM%11 + 1))" >> hostapd.conf 
-	echo "hw_mode=g" >> hostapd.conf 
-	echo "wme_enabled=1" >> hostapd.conf 
-	echo "macaddr_acl=0" >> hostapd.conf 
-	echo "auth_algs=1" >> hostapd.conf 
-	echo "ignore_broadcast_ssid=0" >> hostapd.conf 
-	echo "wpa=2" >> hostapd.conf 
-	echo "wpa_passphrase=$ntpass" >> hostapd.conf 
-	echo "wpa_key_mgmt=WPA-PSK" >> hostapd.conf 
-	echo "wpa_pairwise=TKIP" >> hostapd.conf 
-	echo "rsn_pairwise=CCMP" >> hostapd.conf 
+	echo "interface=$c" > /etc/hostapd.conf
+	echo "driver=nl80211" >> /etc/hostapd.conf 
+	echo "ssid=$ntname" >> /etc/hostapd.conf 
+	echo "channel=$((RANDOM%11 + 1))" >> /etc/hostapd.conf 
+	echo "hw_mode=g" >> /etc/hostapd.conf 
+	echo "wme_enabled=1" >> /etc/hostapd.conf 
+	echo "macaddr_acl=0" >> /etc/hostapd.conf 
+	echo "auth_algs=1" >> /etc/hostapd.conf 
+	echo "ignore_broadcast_ssid=0" >> /etc/hostapd.conf 
+	echo "wpa=2" >> /etc/hostapd.conf 
+	echo "wpa_passphrase=$ntpass" >> /etc/hostapd.conf 
+	echo "wpa_key_mgmt=WPA-PSK" >> /etc/hostapd.conf 
+	echo "wpa_pairwise=TKIP" >> /etc/hostapd.conf 
+	echo "rsn_pairwise=CCMP" >> /etc/hostapd.conf 
 	echo "ok"
 	##############################################
 else
@@ -190,20 +190,20 @@ else
 	sleep 0.1
 	#############################################
 	printf "\033[A\33[2K\r~> updating hostapd.conf file ... "
-	echo "interface=$c" > hostapd.conf
-	echo "driver=nl80211" >> hostapd.conf 
-	echo "ssid=$ntname" >> hostapd.conf 
-	echo "channel=$((RANDOM%11 + 1))" >> hostapd.conf 
-	echo "hw_mode=g" >> hostapd.conf 
-	echo "wme_enabled=1" >> hostapd.conf 
-	echo "macaddr_acl=0" >> hostapd.conf 
-	echo "auth_algs=1" >> hostapd.conf 
-	echo "ignore_broadcast_ssid=0" >> hostapd.conf 
-	echo "wpa=2" >> hostapd.conf 
-	echo "wpa_passphrase=$ntpass" >> hostapd.conf 
-	echo "wpa_key_mgmt=WPA-PSK" >> hostapd.conf 
-	echo "wpa_pairwise=TKIP" >> hostapd.conf 
-	echo "rsn_pairwise=CCMP" >> hostapd.conf 
+	echo "interface=$c" > /etc/hostapd.conf
+	echo "driver=nl80211" >> /etc/hostapd.conf 
+	echo "ssid=$ntname" >> /etc/hostapd.conf 
+	echo "channel=$((RANDOM%11 + 1))" >> /etc/hostapd.conf 
+	echo "hw_mode=g" >> /etc/hostapd.conf 
+	echo "wme_enabled=1" >> /etc/hostapd.conf 
+	echo "macaddr_acl=0" >> /etc/hostapd.conf 
+	echo "auth_algs=1" >> /etc/hostapd.conf 
+	echo "ignore_broadcast_ssid=0" >> /etc/hostapd.conf 
+	echo "wpa=2" >> /etc/hostapd.conf 
+	echo "wpa_passphrase=$ntpass" >> /etc/hostapd.conf 
+	echo "wpa_key_mgmt=WPA-PSK" >> /etc/hostapd.conf 
+	echo "wpa_pairwise=TKIP" >> /etc/hostapd.conf 
+	echo "rsn_pairwise=CCMP" >> /etc/hostapd.conf 
 	##############################################
 	echo "ok"
 fi
@@ -214,7 +214,7 @@ sudo echo 1 > /proc/sys/net/ipv4/ip_forward
 sudo iptables -A FORWARD -i $c -o $in -j ACCEPT
 sudo iptables -A FORWARD -i $in -o $c -m state --state ESTABLISHED,RELATED -j ACCEPT
 sudo iptables -t nat -A POSTROUTING -o $in -j MASQUERADE
-xterm -e bash -c 'sudo dnsmasq -d -C dnsmasq.conf; exec bash' & xterm -e bash -c 'sudo hostapd hostapd.conf; exec bash';
+xterm -e bash -c 'sudo dnsmasq -d -C /etc/dnsmasq.conf; exec bash' & xterm -e bash -c 'sudo hostapd /etc/hostapd.conf; exec bash';
 
 echo "###############    Bye    ###############";
 exit 0
